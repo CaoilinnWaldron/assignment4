@@ -1,0 +1,106 @@
+<form (ngSubmit)="logout()">
+  <button type="submit" class="logoutbtn">Logout</button>
+</form>
+<h2>{{task}}</h2>
+
+<button (click)="toggle()" id="bt">{{buttonName}}</button>
+
+<ng-container *ngIf="show">
+  <form [formGroup]="newTaskForm" (ngSubmit)="createTask()" style="border:1px solid #ccc; border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;">
+    <div style="margin: 0 auto;text-align: left;">
+
+      <label for="taskname">Task Name:</label>
+      <input id="taskname" name="taskname" formControlName="title" required style="width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;"><br><br>
+
+      <label for="priority">Task Priority:</label>
+      <select name="priority" id="priority" formControlName="priority" required style="width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;">
+        <option value="high">High</option>
+        <option value="mid">Mid</option>
+        <option value="low">Low</option>
+      </select><br><br>
+
+      <label for="tasktime">Completion Date:</label>
+      <input type="date" id="tasktime" name="tasktime" formControlName="completion" required style="width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;"><br><br>
+
+      <label>Content:</label>
+      <textarea rows="5" cols="46" formControlName="content" required style="width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;"></textarea><br><br>
+
+      <button type="submit" class="submitbtn" style="width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;">Add Task</button>
+    </div>
+  </form>
+</ng-container>
+<div class="center">
+<ul class="tasks">
+  <li *ngFor="let task of allValues; let i = index">
+    <button [class.selected]="task === selectedTask" type="button" (click)="onSelect(i)"
+      style="border: none; background-color: white; padding: 10px;">
+      <span class="title" style="color: blue;">{{task.Title | uppercase}}</span><br>
+      <span class="priority">Priority: {{task.Priority}}</span>
+      <div *ngIf="(isComplete(task.CompletionDate))">
+        <span class="date">Completion status: <b style="color: green;">Complete</b> </span>
+      </div>
+      <div *ngIf="(!isComplete(task.CompletionDate))">
+        <span class="date">Completion status: <b style="color: red;">Incomplete</b></span>
+      </div>
+    </button>
+  </li>
+</ul>
+
+<div *ngIf="selectedTask">
+  <h2>{{selectedTask.Title | uppercase}} Details</h2>
+  <div>
+    <label for="task-name">Task name: </label>
+    <input id="task-name" [(ngModel)]="selectedTask.Title" placeholder="title">
+  </div>
+  <div>
+    <label for="task-date">Task Completion Date: </label>
+    <input type="date" id="task-date" [(ngModel)]="selectedTask.CompletionDate" placeholder="n.d">
+  </div>
+  <div>
+    <label for="task-date">Task Priority: </label>
+    <select id="task-date" [(ngModel)]="selectedTask.Priority" placeholder="mid"><option value="high">High</option>
+      <option value="mid">Mid</option>
+      <option value="low">Low</option></select>
+  </div>
+  <div>
+    <label for="task-content">Content: </label><br>
+    <textarea rows="5" cols="46"  id="task-content" [(ngModel)]="selectedTask.Content" placeholder="content"></textarea>
+  </div>
+  <button type="button" (click)="onDelete(selectedTask)">Delete</button>
+  <button type="button" (click)="onBack()">Back</button>
+  <button type="button" (click)="onSave(selectedTask)">Save</button>
+</div>
+</div>
